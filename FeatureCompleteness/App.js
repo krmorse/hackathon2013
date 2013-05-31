@@ -1,8 +1,14 @@
-Ext.define('CustomApp', {
-    extend: 'Rally.app.App',
+Ext.define('Yahoo.app.FeatureCompleteness', {
+    extend: 'Rally.app.TimeboxScopedApp',
     componentCls: 'app',
 
-    launch: function() {
-        //Write app code here
+    scopeType: 'release',
+
+    addContent: function(scope) {
+        //render components
+    },
+
+    onScopeChange: function(scope) {
+        //refresh components
     }
 });

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FeatureCompleteness</title>
+    <title>Feature Completenss Report</title>
 
     <script type="text/javascript" src="/apps/2.0rc1/sdk.js"></script>
 
     <script type="text/javascript">
         Rally.onReady(function () {
-                Ext.define("CustomApp",{extend:"Rally.app.App",componentCls:"app",launch:function(){}});
+                Ext.define("Yahoo.app.FeatureCompleteness",{extend:"Rally.app.TimeboxScopedApp",componentCls:"app",scopeType:"release",addContent:function(scope){},onScopeChange:function(scope){}});
 
-            Rally.launchApp('CustomApp', {
-                name:"FeatureCompleteness",
+            Rally.launchApp('Yahoo.app.FeatureCompleteness', {
+                name:"Feature Completenss Report",
 	            parentRepos:""
             });
 

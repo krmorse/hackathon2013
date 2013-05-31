@@ -6,18 +6,15 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
     scopeType: 'release',
 
     addContent: function (scope) {
-        //render components
         this._drawChart();
     },
 
     onScopeChange: function (scope) {
-        //refresh components
         this._drawChart();
     },
 
     _drawChart: function () {
         if (this.chart) {
-            //refresh
             this.chart.destroy();
         }
 
@@ -56,7 +53,7 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
                 type: 'bar'
             },
             title: {
-                text: 'Feature Completeness Report'
+                text: 'PSI Completeness Report'
             },
             xAxis: {
                 title: {

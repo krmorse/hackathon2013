@@ -1,27 +1,19 @@
 Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
 
-    config: {
-    },
-
-    constructor: function(config) {
-        this.initConfig(config);
-        this.callParent(arguments);
-    },
-
     prepareChartData: function(store) {
         var categories = [];
         var actualData = [];
-        var plannedData = [];
+        var expectedData = [];
+        var forecastData = [];
 
         store.each(function(record) {
             categories.push(record.get('Name'));
 
-            // Plan completion =
-            // - nbDaySpent = number of day elapse since the the beginning of
+            // Plan completion = featureNbDaysElapseToDate * planStoryPerDay
+            // - featureNbDaysElapseToDate = number of day elapse since the the beginning of
             // the feature
-            // - planStoryPerDay = expected number of story points being
+            // - featurePlanEstimatePerDay = expected number of story points being
             // completed for a given day for this feature
-            // formula = nbDaySpent * planStoryPerDay
 
             var startDate = record.get("PlannedStartDate");
             var endDate = record.get("PlannedEndDate");
@@ -46,16 +38,20 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
             }
 
             var featurePlanEstimate = record.get("LeafStoryPlanEstimateTotal");
+            var featureActualEstimate = record.get("AcceptedLeafStoryPlanEstimateTotal");
             var featurePlanEstimatePerDay = featurePlanEstimate / featureLengthInDays;
+            var featureActualEstimatePerDay = featureActualEstimate / featureLengthInDays;
 
-            var plan = 0, actual = 0;
+            var plan = 0, actual = 0, forecast = 0;
             if(featurePlanEstimate) {
                 plan = ((featureNbDaysElapseToDate * featurePlanEstimatePerDay) / featurePlanEstimate) * 100;
-                actual = ((record.get("AcceptedLeafStoryPlanEstimateTotal") / featurePlanEstimate) * 100);
+                actual = (featureActualEstimate / featurePlanEstimate) * 100;
+                forecast = ((featurePlanEstimate - featureActualEstimate) / featureActualEstimatePerDay) * 100 + actual;
             }
             actualData.push(actual);
-            plannedData.push(plan);
-        });     
+            expectedData.push(plan);
+            forecastData.push(forecast);
+        });
 
         return {
             categories: categories,
@@ -65,8 +61,8 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
                     data: actualData
                 },
                 {
-                    name: 'Planned',
-                    data: plannedData
+                    name: 'Expected',
+                    data: expectedData
                 }
             ]
         };

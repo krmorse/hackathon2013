@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Feature Completenss Report</title>
+    <title>Feature Completeness Report</title>
 
     <script type="text/javascript" src="/apps/2.0rc1/sdk.js"></script>
 
     <script type="text/javascript">
         Rally.onReady(function () {
-                Ext.define("Yahoo.app.FeatureCompleteness",{extend:"Rally.app.TimeboxScopedApp",componentCls:"app",scopeType:"release",addContent:function(scope){},onScopeChange:function(scope){}});
+                Ext.define("Yahoo.app.FeatureCompletenessCalculator",{});
+                Ext.define("Yahoo.app.FeatureCompleteness",{extend:"Rally.app.TimeboxScopedApp",requires:["Yahoo.app.FeatureCompletenessCalculator"],componentCls:"app",scopeType:"release",addContent:function(scope){this._drawChart()},onScopeChange:function(scope){},_drawChart:function(){this.chart||(this.chart=this.add({xtype:"rallychart",storeType:"Rally.data.WsapiDataStore",storeConfig:{context:this.getContext(),filters:[this.getContext().getTimeboxScope().getQueryFilter()],sorters:[{property:"Rank",direction:"DESC"}],pageSize:10,fetch:!0},calculatorType:"Yahoo.app.FeatureCompletenessCalculator",chartConfig:this._getChartConfig()}))},_getChartConfig:function(){return{chart:{type:"bar"},title:{text:"Feature Completeness Report"},xAxis:{categories:["Feature 1","Feature 2","Feature 3","Feature 4","Feature 5"],title:{text:null}},yAxis:{min:0,max:100,title:{text:"% Complete",align:"high"},labels:{overflow:"justify"}},tooltip:{valueSuffix:" %"},plotOptions:{bar:{dataLabels:{enabled:!1}}},legend:{layout:"vertical",align:"right",verticalAlign:"top",x:-100,y:100,floating:!0,borderWidth:1,backgroundColor:"#FFFFFF",shadow:!0},series:[{name:"Actual",data:[5,10,20,30,40]},{name:"Planned",data:[10,20,30,40,50]}]}}});
 
             Rally.launchApp('Yahoo.app.FeatureCompleteness', {
-                name:"Feature Completenss Report",
+                name:"Feature Completeness Report",
 	            parentRepos:""
             });
 

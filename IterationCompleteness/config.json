@@ -1,11 +1,12 @@
 {
-    "name": "PSI Completeness Report",
-    "className": "Yahoo.app.FeatureCompleteness",
+    "name": "IterationCompleteness",
+    "className": "Yahoo.app.IterationCompleteness",
     "server": "https://rally1.rallydev.com",
     "sdk": "2.0rc1",
     "javascript": [
         "Calculator.js",
-        "PSIBurnUpCalculator.js",
+        "StoryPopover.js",
+        "../common/PSIBurnUpCalculator.js",
         "App.js"
     ],
     "css": [

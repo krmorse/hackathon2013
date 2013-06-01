@@ -142,10 +142,4 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
         };
     }
 });
-                    name: 'Feature Boundaries',
-                    data: boundaryData
-                }
-            ]
-        };
-    }
-});
+                 

@@ -58,8 +58,8 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
                     model: 'PortfolioItemFeature',
                     context: this.getContext().getDataContext(),
                     filters: [ this.getContext().getTimeboxScope().getQueryFilter() ],
-                    pageSize: 10,
-                    limit: 10,
+                    pageSize: 15,
+                    limit: 15,
                     sorters: [
                         {
                             property: 'Rank',

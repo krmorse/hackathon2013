@@ -12,7 +12,7 @@ Ext.define('Yahoo.app.PSIBurnUpCalculator', {
             },
             {
                 "field": "PlanEstimate",
-                "as": "Completed",
+                "as": "Accepted",
                 "f": "filteredSum",
                 "filterField": "ScheduleState",
                 "filterValues": ["Accepted", "Released"],

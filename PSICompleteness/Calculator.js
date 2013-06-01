@@ -43,7 +43,7 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
                 }
 
                 featurePlanEstimate = record.get("LeafStoryPlanEstimateTotal");
-                featureActualEstimate = record.get("AcceptedLeafStoryPlanEstimateTotal")
+                featureActualEstimate = record.get("AcceptedLeafStoryPlanEstimateTotal");
             }
 
             var featureLengthInDays = Math.ceil((Rally.util.DateTime.getDifference(

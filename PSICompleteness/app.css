@@ -10,3 +10,17 @@
 .feature-popover .title {
     margin-bottom: 10px;
 }
+
+.feature-popover .message {
+    margin-top: 10px;
+    font-weight: bold;
+    color: green;
+}
+
+.feature-popover .message .late {
+    color: red;
+}
+
+.feature-popover .message .behind {
+    color: orange;
+}

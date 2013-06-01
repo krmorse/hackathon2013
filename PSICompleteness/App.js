@@ -46,8 +46,7 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
             this.chart.destroy();
         }
 
-        this.chart = this
-            .add({
+        this.chart = this.add({
                 xtype: 'rallychart',
 
                 _haveDataToRender: function () {
@@ -57,19 +56,16 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
                 storeType: 'Rally.data.WsapiDataStore',
                 storeConfig: {
                     model: 'PortfolioItemFeature',
-                    context: this.getContext()
-                        .getDataContext(),
-                    filters: [ this.getContext()
-                        .getTimeboxScope()
-                        .getQueryFilter() ],
+                    context: this.getContext().getDataContext(),
+                    filters: [ this.getContext().getTimeboxScope().getQueryFilter() ],
+                    pageSize: 10,
+                    limit: 10,
                     sorters: [
                         {
                             property: 'Rank',
-                            direction: 'DSC'
+                            direction: 'ASC'
                         }
                     ],
-                    pageSize: 10,
-                    limit: 10,
                     fetch: [
                         'FormattedID',
                         'PlannedStartDate',
@@ -84,7 +80,9 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
                 calculatorType: 'Yahoo.app.FeatureCompletenessCalculator',
                 calculatorConfig: {},
 
-                chartConfig: this._getPSICompletenessChartConfig()
+                chartConfig: this._getPSICompletenessChartConfig(),
+
+                chartColors: [ '#f00', 'yellow', '#000']
             });
     },
 
@@ -93,7 +91,8 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
         return {
             chart: {
                 type: 'columnrange',
-                inverted: true
+                inverted: true,
+                zoomType: 'xy'
             },
             title: {
                 text: 'PSI Completeness Report'
@@ -118,8 +117,8 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
                             }
                         })(),
                         width: 2,
-                        color: "red",
-                        zIndex: 100 }
+                        color: "blue",
+                        zIndex: 50 }
                 ],
                 endOnTick: true,
                 startOnTick: true,

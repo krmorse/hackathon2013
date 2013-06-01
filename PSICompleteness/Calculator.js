@@ -4,7 +4,6 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
         var categories = [];
         var actualData = [];
         var expectedData = [];
-        var forecastData = [];
         var boundaryData = [];
 
         store.each(function (record) {
@@ -19,32 +18,23 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
 
             var startDate, endDate, Rst, Rend, featurePlanEstimate, featureActualEstimate;
 
-            if (record.self.typeName === 'HierarchicalRequirement') {
-                startDate = Rally.util.DateTime.fromIsoString(record.get('Iteration').StartDate);
-                endDate = Rally.util.DateTime.fromIsoString(record.get('Iteration').EndDate);
-                Rst = startDate;
-                Rend = endDate;
+            //assuming portfolioitem
+            startDate = record.get("PlannedStartDate");
+            endDate = record.get("PlannedEndDate");
 
-                featurePlanEstimate = record.get("PlanEstimate");
-                featureActualEstimate = record.get("ScheduleState") !== "Accepted" ? 0 : featurePlanEstimate;
-            } else {
-                //assuming portfolioitem
-                startDate = record.get("PlannedStartDate");
-                endDate = record.get("PlannedEndDate");
+            Rst = Rally.util.DateTime.fromIsoString(record.get("Release").ReleaseStartDate);
+            Rend = Rally.util.DateTime.fromIsoString(record.get("Release").ReleaseDate);
 
-                Rst = Rally.util.DateTime.fromIsoString(record.get("Release").ReleaseStartDate);
-                Rend = Rally.util.DateTime.fromIsoString(record.get("Release").ReleaseDate);
-
-                if (startDate === null) {
-                    startDate = Rst;
-                }
-                if (endDate === null) {
-                    endDate = Rend;
-                }
-
-                featurePlanEstimate = record.get("LeafStoryPlanEstimateTotal");
-                featureActualEstimate = record.get("AcceptedLeafStoryPlanEstimateTotal");
+            if (startDate === null) {
+                startDate = Rst;
             }
+            if (endDate === null) {
+                endDate = Rend;
+            }
+
+            featurePlanEstimate = record.get("LeafStoryPlanEstimateTotal");
+            featureActualEstimate = record.get("AcceptedLeafStoryPlanEstimateTotal");
+
 
             var featureLengthInDays = Math.ceil((Rally.util.DateTime.getDifference(
                 endDate, startDate, 'hour') / 24)); // See note below to explain the +1
@@ -124,13 +114,13 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
             plan = [ Est, Eend ];
             actual = [ Ast, Aend];
             if (featurePlanEstimate) {
-                forecast = ((featurePlanEstimate - featureActualEstimate) / featureActualEstimatePerDay) * 100 + actual;
+                forecast = ((featurePlanEstimate - featureActualEstimate) / featureActualEstimatePerDay);
             }
 
-            actualData.push(actual);//{y: actual, record: record});
-            expectedData.push(plan);
-            forecastData.push(forecast);
-            boundaryData.push(boundary);
+            var commonData = {actual: actual, expected: plan, forecast: forecast, boundary: boundary, record: record};
+            actualData.push(Ext.apply({low: actual[0], high: actual[1]}, commonData));
+            expectedData.push(Ext.apply({low: plan[0], high: plan[1]}, commonData));
+            boundaryData.push(Ext.apply({low: boundary[0], high: boundary[1]}, commonData));
         });
 
         return {

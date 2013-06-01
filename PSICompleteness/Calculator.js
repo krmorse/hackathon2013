@@ -4,7 +4,6 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
         var categories = [];
         var actualData = [];
         var expectedData = [];
-        var forecastData = [];
         var boundaryData = [];
 
         store.each(function (record) {
@@ -35,6 +34,7 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
 
             featurePlanEstimate = record.get("LeafStoryPlanEstimateTotal");
             featureActualEstimate = record.get("AcceptedLeafStoryPlanEstimateTotal");
+
 
             var featureLengthInDays = Math.ceil((Rally.util.DateTime.getDifference(
                 endDate, startDate, 'hour') / 24)); // See note below to explain the +1
@@ -114,13 +114,13 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
             plan = [ Est, Eend ];
             actual = [ Ast, Aend];
             if (featurePlanEstimate) {
-                forecast = ((featurePlanEstimate - featureActualEstimate) / featureActualEstimatePerDay) * 100 + actual;
+                forecast = ((featurePlanEstimate - featureActualEstimate) / featureActualEstimatePerDay);
             }
 
-            actualData.push(actual);//{y: actual, record: record});
-            expectedData.push(plan);
-            forecastData.push(forecast);
-            boundaryData.push(boundary);
+            var commonData = {actual: actual, expected: plan, forecast: forecast, boundary: boundary, record: record};
+            actualData.push(Ext.apply({low: actual[0], high: actual[1]}, commonData));
+            expectedData.push(Ext.apply({low: plan[0], high: plan[1]}, commonData));
+            boundaryData.push(Ext.apply({low: boundary[0], high: boundary[1]}, commonData));
         });
 
         return {
@@ -135,6 +135,13 @@ Ext.define('Yahoo.app.FeatureCompletenessCalculator', {
                     data: expectedData
                 },
                 {
+                    name: 'Feature Boundaries',
+                    data: boundaryData
+                }
+            ]
+        };
+    }
+});
                     name: 'Feature Boundaries',
                     data: boundaryData
                 }

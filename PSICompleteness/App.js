@@ -46,8 +46,7 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
             this.chart.destroy();
         }
 
-        this.chart = this
-            .add({
+        this.chart = this.add({
                 xtype: 'rallychart',
 
                 _haveDataToRender: function () {
@@ -57,19 +56,18 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
                 storeType: 'Rally.data.WsapiDataStore',
                 storeConfig: {
                     model: 'PortfolioItemFeature',
-                    context: this.getContext()
-                        .getDataContext(),
-                    filters: [ this.getContext()
-                        .getTimeboxScope()
-                        .getQueryFilter() ],
+                    context: this.getContext().getDataContext(),
+                    filters: [ this.getContext().getTimeboxScope().getQueryFilter() ],
+                    pageSize: 15,
+                    limit: 15,
                     sorters: [
                         {
                             property: 'Rank',
-                            direction: 'DSC'
+                            direction: 'ASC'
                         }
                     ],
-                    pageSize: 2,
                     fetch: [
+                        'FormattedID',
                         'PlannedStartDate',
                         'PlannedEndDate',
                         'LeafStoryPlanEstimateTotal',
@@ -77,13 +75,14 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
                         'Name', 'Release',
                         'ReleaseDate',
                         'ReleaseStartDate' ]
-                    //,limit: 15
                 },
 
                 calculatorType: 'Yahoo.app.FeatureCompletenessCalculator',
                 calculatorConfig: {},
 
-                chartConfig: this._getPSICompletenessChartConfig()
+                chartConfig: this._getPSICompletenessChartConfig(),
+
+                chartColors: [ '#f00', 'yellow', '#000']
             });
     },
 
@@ -92,7 +91,8 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
         return {
             chart: {
                 type: 'columnrange',
-                inverted: true
+                inverted: true,
+                zoomType: 'xy'
             },
             title: {
                 text: 'PSI Completeness Report'
@@ -117,8 +117,8 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
                             }
                         })(),
                         width: 2,
-                        color: "red",
-                        zIndex: 100 }
+                        color: "blue",
+                        zIndex: 50 }
                 ],
                 endOnTick: true,
                 startOnTick: true,
@@ -150,27 +150,28 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
                         enabled: false
                     },
                     events: {
-                        click: Ext.bind(function (e) {
-                            var feature = e.point.series.data[0].record;
-                            if (feature) {
-                                this._showFeaturePopover(feature, Ext.get(e.target));
-                            }
-                        }, this)
-                    },
-                    cursor: 'pointer'
+                        click: function (e) {
+                            Ext.create('Yahoo.app.FeaturePopover', {
+                                record: e.point.record,
+                                seriesData: e.point.options,
+                                target: Ext.get(e.target)
+                            });
+                        },
+                        cursor: 'pointer'
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -100,
+                    y: 100,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: '#FFFFFF',
+                    shadow: true,
+                    reversed: true
                 }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: -100,
-                y: 100,
-                floating: true,
-                borderWidth: 1,
-                backgroundColor: '#FFFFFF',
-                shadow: true,
-                reversed: true
             }
         };
     },
@@ -223,13 +224,5 @@ Ext.define('Yahoo.app.FeatureCompleteness', {
             }
         };
 
-    },
-
-    _showFeaturePopover: function (feature, el) {
-        Ext.create('Yahoo.app.FeaturePopover', {
-            record: feature,
-            target: el
-        });
     }
-
 });

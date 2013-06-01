@@ -6,6 +6,7 @@
     "javascript": [
         "Calculator.js",
         "PSIBurnUpCalculator.js",
+        "FeaturePopover.js",
         "App.js"
     ],
     "css": [

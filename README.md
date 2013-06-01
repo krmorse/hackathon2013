@@ -6,7 +6,7 @@ Introduction
 My name is Cedric Lignier. I am the Customer Product Owner for Rally at Yahoo in charge of the adoption and rollout of Rally within our organization.
 I'm partnering with Kyle from Rally Software as part of the Rally Hackathon to learn more about the Rally SDK and how our organization can leverage it to meet specific needs.
 
-For a litte bit of context, early in 2012, our company decided to adopt an adaptive planning process to address a longstanding misalignment between strategy and agile team execution. Business Units are implementing the program level of this Scaled Agile Framework (under the label of "Adaptive Planning") and already launch Agile Release Trains
+For a little bit of context, early in 2012, our company decided to adopt an adaptive planning process to address a longstanding misalignment between strategy and agile team execution. Business Units are implementing the program level of this Scaled Agile Framework (under the label of "Adaptive Planning") and already launch Agile Release Trains
 
 The hack that we are working is aimed to facilitate the decision making process for program managers and leaders running Agile Release Trains of what changes might be necessary to successfully deliver the PSI. We are building reports that provide insights on the progress being made for a given PSI (what rally refers as a "release") available at any given point of time.
 
